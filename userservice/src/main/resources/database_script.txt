@@ -1,0 +1,14 @@
+1. create an use DB
+use user_test
+
+2. create table(collection)
+db.createCollection("user")
+
+3. insert record
+db.user.insert({name:'rishi',email:'sv@gmail.com',dateOfBirth:'Dec 18 2018',role:'ADMIN',active:true,employeeId:2075})
+
+4. Drop table(collection)
+db.user.drop()
+
+5. View table data
+db.user.find()
