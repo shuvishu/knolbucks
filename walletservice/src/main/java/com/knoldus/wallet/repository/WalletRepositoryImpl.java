@@ -2,11 +2,13 @@ package com.knoldus.wallet.repository;
 
 import com.knoldus.wallet.model.RechargeRequest;
 import org.davidmoten.rx.jdbc.Database;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.inject.Inject;
 
+@Repository
 public class WalletRepositoryImpl implements WalletRepository {
 
     private Database database;
