@@ -31,7 +31,7 @@ public class WalletHandler {
 
     }
 
-    public Mono<ServerResponse> getWalletWithPendingStatus(ServerRequest serverRequest) {
+    public Mono<ServerResponse> getWalletsWithPendingStatus(ServerRequest serverRequest) {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(fromPublisher(walletService.getWalletWithPendingStatus(), RechargeRequest.class));
@@ -45,4 +45,13 @@ public class WalletHandler {
                 .body(fromPublisher(walletService.updateStatusInRechargeRequest(userId),
                         RechargeRequest.class));
     }
+
+    public Mono<ServerResponse> getWallet(ServerRequest serverRequest) {
+        final int userId = Integer.parseInt(serverRequest.pathVariable("userId"));
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(fromPublisher(walletService.getWalletWithPendingStatus(), RechargeRequest.class));
+
+    }
+
 }

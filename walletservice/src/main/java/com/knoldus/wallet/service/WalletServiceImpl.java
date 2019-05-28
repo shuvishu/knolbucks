@@ -28,13 +28,18 @@ public class WalletServiceImpl implements WalletService {
    // TODO
     @Override
     public Flux<RechargeRequest> getWalletWithPendingStatus() {
-        return walletRepository.getWalletWithPendingStatus();
+        return walletRepository.getWalletsWithPendingStatus();
     }
 
     // TODO
     @Override
     public Mono<RechargeRequest> updateStatusInRechargeRequest(int userId) {
-
         return walletRepository.updateStatusInWalletRecharge(userId);
+    }
+
+    // TODO
+    @Override
+    public Mono<RechargeRequest> getWallet(int userId) {
+        return walletRepository.getWallet(userId);
     }
 }

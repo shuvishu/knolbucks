@@ -11,4 +11,6 @@ public interface WalletService {
     Flux<RechargeRequest> getWalletWithPendingStatus();
 
     Mono<RechargeRequest> updateStatusInRechargeRequest(int userId);
+
+    Mono<RechargeRequest> getWallet(int userId);
 }

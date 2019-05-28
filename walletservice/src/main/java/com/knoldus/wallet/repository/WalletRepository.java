@@ -8,8 +8,10 @@ public interface WalletRepository {
 
     Mono<String> rechargeWallet(RechargeRequest rechargeRequest);
 
-    Flux<RechargeRequest> getWalletWithPendingStatus();
+    Flux<RechargeRequest> getWalletsWithPendingStatus();
 
     Mono<RechargeRequest> updateStatusInWalletRecharge(int userId);
+
+    Mono<RechargeRequest> getWallet(int userId);
 
 }

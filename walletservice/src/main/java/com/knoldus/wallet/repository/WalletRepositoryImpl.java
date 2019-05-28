@@ -27,13 +27,19 @@ public class WalletRepositoryImpl implements WalletRepository {
 
     // TODO
     @Override
-    public Flux<RechargeRequest> getWalletWithPendingStatus() {
+    public Flux<RechargeRequest> getWalletsWithPendingStatus() {
         return null;
     }
 
     // TODO
     @Override
     public Mono<RechargeRequest> updateStatusInWalletRecharge(int userId) {
+        return null;
+    }
+
+    // TODO
+    @Override
+    public Mono<RechargeRequest> getWallet(int userId) {
         return null;
     }
 }

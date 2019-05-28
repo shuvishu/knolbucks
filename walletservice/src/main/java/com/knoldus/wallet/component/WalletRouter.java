@@ -18,9 +18,10 @@ public class WalletRouter {
 
         return RouterFunctions.route()
                 .path("/wallet", builder -> builder
-                        .POST("/recharge", accept(MediaType.APPLICATION_JSON), walletHandler::rechargeWallet)
-                        .GET("/getWallet", accept(MediaType.APPLICATION_JSON), walletHandler::getWalletWithPendingStatus)
-                        .PUT("/status/{userId}", accept(MediaType.APPLICATION_JSON), walletHandler::updateStatusOfWallet)
+                        .POST("", accept(MediaType.APPLICATION_JSON), walletHandler::rechargeWallet)
+                        .GET("", accept(MediaType.APPLICATION_JSON), walletHandler::getWalletsWithPendingStatus)
+                        .GET("/{userId}", accept(MediaType.APPLICATION_JSON), walletHandler::getWallet)
+                        .PUT("/wallet/{userId}", accept(MediaType.APPLICATION_JSON), walletHandler::updateStatusOfWallet)
                 )
                 .build();
     }
