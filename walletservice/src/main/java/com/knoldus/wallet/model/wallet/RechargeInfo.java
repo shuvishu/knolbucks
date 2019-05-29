@@ -1,15 +1,21 @@
-package com.knoldus.wallet.model;
+package com.knoldus.wallet.model.wallet;
 
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 
 @Getter
+@Table(name = "coupon_requests")
+@Entity
 @Builder
-public class RechargeRequest {
+public class RechargeInfo {
 
-    String id;
+    @Id
+    int id;
 
     String walletId;
 

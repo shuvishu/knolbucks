@@ -1,6 +1,9 @@
 package com.knoldus.wallet.handler;
 
-import com.knoldus.wallet.model.RechargeRequest;
+import com.knoldus.wallet.model.ResponseBody;
+import com.knoldus.wallet.model.wallet.RechargeInfo;
+import com.knoldus.wallet.model.wallet.RechargeRequest;
+import com.knoldus.wallet.model.wallet.RechargeResponse;
 import com.knoldus.wallet.service.WalletService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -23,35 +26,35 @@ public class WalletHandler {
     }
 
     public Mono<ServerResponse> rechargeWallet(ServerRequest serverRequest) {
-        Mono<RechargeRequest> walletRechargeRequest = serverRequest.bodyToMono(RechargeRequest.class);
+        Mono<RechargeRequest> rechargeInfo = serverRequest.bodyToMono(RechargeRequest.class);
 
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(fromPublisher(walletRechargeRequest.flatMap(walletService::rechargeWallet), String.class));
+                .body(fromPublisher(rechargeInfo.flatMap(walletService::rechargeWallet), ResponseBody.class));
 
     }
 
-    public Mono<ServerResponse> getWalletsWithPendingStatus(ServerRequest serverRequest) {
-        return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(fromPublisher(walletService.getWalletWithPendingStatus(), RechargeRequest.class));
-
-    }
-
-    public Mono<ServerResponse> updateStatusOfWallet(ServerRequest serverRequest) {
-        final int userId = Integer.parseInt(serverRequest.pathVariable("userId"));
-        return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(fromPublisher(walletService.updateStatusInRechargeRequest(userId),
-                        RechargeRequest.class));
-    }
-
-    public Mono<ServerResponse> getWallet(ServerRequest serverRequest) {
-        final int userId = Integer.parseInt(serverRequest.pathVariable("userId"));
-        return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(fromPublisher(walletService.getWalletWithPendingStatus(), RechargeRequest.class));
-
-    }
+//    public Mono<ServerResponse> getWalletsWithPendingStatus(ServerRequest serverRequest) {
+//        return ServerResponse.ok()
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(fromPublisher(walletService.getWalletWithPendingStatus(), RechargeInfo.class));
+//
+//    }
+//
+//    public Mono<ServerResponse> updateStatusOfWallet(ServerRequest serverRequest) {
+//        final int userId = Integer.parseInt(serverRequest.pathVariable("userId"));
+//        return ServerResponse.ok()
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(fromPublisher(walletService.updateStatusInRechargeRequest(userId),
+//                        RechargeInfo.class));
+//    }
+//
+//    public Mono<ServerResponse> getWallet(ServerRequest serverRequest) {
+//        final int userId = Integer.parseInt(serverRequest.pathVariable("userId"));
+//        return ServerResponse.ok()
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(fromPublisher(walletService.getWalletWithPendingStatus(), RechargeInfo.class));
+//
+//    }
 
 }
