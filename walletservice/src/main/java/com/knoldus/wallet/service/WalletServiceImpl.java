@@ -1,10 +1,13 @@
 package com.knoldus.wallet.service;
 
+import com.knoldus.wallet.exception.WalletDoesNotExists;
 import com.knoldus.wallet.model.wallet.RechargeInfo;
 import com.knoldus.wallet.model.ResponseBody;
 import com.knoldus.wallet.model.wallet.RechargeRequest;
 import com.knoldus.wallet.model.wallet.RechargeResponse;
+import com.knoldus.wallet.model.wallet.WalletInfo;
 import com.knoldus.wallet.model.wallet.WalletStatus;
+import com.knoldus.wallet.repository.WalletRechargeRepository;
 import com.knoldus.wallet.repository.WalletRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -16,11 +19,14 @@ import java.time.LocalDateTime;
 @Service
 public class WalletServiceImpl implements WalletService {
 
+    private WalletRechargeRepository walletRechargeRepository;
+
     private WalletRepository walletRepository;
 
     @Inject
-    public WalletServiceImpl(WalletRepository walletRepository) {
+    public WalletServiceImpl(WalletRechargeRepository walletRechargeRepository, WalletRepository walletRepository) {
 
+        this.walletRechargeRepository = walletRechargeRepository;
         this.walletRepository = walletRepository;
     }
 
@@ -29,18 +35,21 @@ public class WalletServiceImpl implements WalletService {
 
 
         return Mono.fromSupplier(() -> {
+            String walletId = getWalletDetailsByEmployeeId(recharge.getEmpId()).getId();
+            System.out.println(walletId);
+
                    RechargeInfo rechargeInfo = RechargeInfo.builder()
                            .quantity(recharge.getQuantity())
-                           .issuerId(recharge.getEmpId())
+                           .issuerId("Admin1")
                            .requestedOn(Timestamp.valueOf(LocalDateTime.now()))
                            .approvedOn(Timestamp.valueOf(LocalDateTime.now()))
-                           .walletId("")
-                           .requesterId("")
+                           .walletId(walletId)
+                           .requesterId(recharge.getEmpId())
                            .status(WalletStatus.PENDING.getStatus())
                            .build();
 
             System.out.println("asd/sdfghjkl;" + rechargeInfo.getApprovedOn());
-                    RechargeInfo response = walletRepository.save(rechargeInfo);
+                    RechargeInfo response = walletRechargeRepository.save(rechargeInfo);
                     return ResponseBody.<RechargeResponse>builder()
                             .data(RechargeResponse.builder()
                                     .message("Wallet Request Sent and is Pending for Approval")
@@ -52,5 +61,10 @@ public class WalletServiceImpl implements WalletService {
 
         );
     }
+
+   private WalletInfo getWalletDetailsByEmployeeId(String empId) {
+
+        return walletRepository.findByUserId(empId).orElseThrow(WalletDoesNotExists::new);
+   }
 
 }

@@ -9,7 +9,8 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseBody<T> {
 
-    private int status;
+    @Builder.Default
+    private String status = "success";
 
     private String errors;
 
