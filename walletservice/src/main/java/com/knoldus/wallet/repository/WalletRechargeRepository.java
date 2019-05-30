@@ -7,13 +7,6 @@ import reactor.core.publisher.Mono;
 
 public interface WalletRechargeRepository extends JpaRepository<RechargeInfo, String> {
 
-
-//    Mono<String> rechargeWallet(RechargeInfo rechargeRequest);
-//
-//    Flux<RechargeInfo> getWalletsWithPendingStatus();
-//
-//    Mono<RechargeInfo> updateStatusInWalletRecharge(int userId);
-//
-//    Mono<RechargeInfo> getWallet(int userId);
+    boolean existsByRequesterId(String requesterId);
 
 }

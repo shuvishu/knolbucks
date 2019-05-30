@@ -1,6 +1,7 @@
 package com.knoldus.wallet.service;
 
 import com.knoldus.wallet.exception.WalletDoesNotExists;
+import com.knoldus.wallet.exception.WalletRequestAlreadyPendingException;
 import com.knoldus.wallet.model.wallet.RechargeInfo;
 import com.knoldus.wallet.model.ResponseBody;
 import com.knoldus.wallet.model.wallet.RechargeRequest;
@@ -9,6 +10,7 @@ import com.knoldus.wallet.model.wallet.WalletInfo;
 import com.knoldus.wallet.model.wallet.WalletStatus;
 import com.knoldus.wallet.repository.WalletRechargeRepository;
 import com.knoldus.wallet.repository.WalletRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -16,6 +18,7 @@ import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 public class WalletServiceImpl implements WalletService {
 
@@ -35,9 +38,13 @@ public class WalletServiceImpl implements WalletService {
 
 
         return Mono.fromSupplier(() -> {
-            String walletId = getWalletDetailsByEmployeeId(recharge.getEmpId()).getId();
-            System.out.println(walletId);
 
+            String walletId = getWalletDetailsByEmployeeId(recharge.getEmpId()).getId();
+
+            if(walletRechargeRepository.existsByRequesterId(recharge.getEmpId())) {
+
+                throw new WalletRequestAlreadyPendingException();
+            }
                    RechargeInfo rechargeInfo = RechargeInfo.builder()
                            .quantity(recharge.getQuantity())
                            .issuerId("Admin1")
@@ -48,8 +55,8 @@ public class WalletServiceImpl implements WalletService {
                            .status(WalletStatus.PENDING.getStatus())
                            .build();
 
-            System.out.println("asd/sdfghjkl;" + rechargeInfo.getApprovedOn());
                     RechargeInfo response = walletRechargeRepository.save(rechargeInfo);
+
                     return ResponseBody.<RechargeResponse>builder()
                             .data(RechargeResponse.builder()
                                     .message("Wallet Request Sent and is Pending for Approval")
@@ -59,7 +66,10 @@ public class WalletServiceImpl implements WalletService {
                             ).build();
                 }
 
-        );
+        ).onErrorMap(throwable -> {
+            log.error("Unknown exception has occurred due to the following reason " + throwable.getCause());
+            throw new RuntimeException(throwable.getCause());
+        });
     }
 
    private WalletInfo getWalletDetailsByEmployeeId(String empId) {
