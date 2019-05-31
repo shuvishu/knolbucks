@@ -1,7 +1,7 @@
 package com.knoldus.wallet.service;
 
 import com.knoldus.wallet.exception.WalletDoesNotExists;
-import com.knoldus.wallet.exception.WalletRequestAlreadyPendingException;
+import com.knoldus.wallet.exception.WalletRequestAlreadyPending;
 import com.knoldus.wallet.model.wallet.RechargeInfo;
 import com.knoldus.wallet.model.ResponseBody;
 import com.knoldus.wallet.model.wallet.RechargeRequest;
@@ -43,7 +43,7 @@ public class WalletServiceImpl implements WalletService {
 
             if(walletRechargeRepository.existsByRequesterId(recharge.getEmpId())) {
 
-                throw new WalletRequestAlreadyPendingException();
+                throw new WalletRequestAlreadyPending();
             }
                    RechargeInfo rechargeInfo = RechargeInfo.builder()
                            .quantity(recharge.getQuantity())
@@ -66,10 +66,7 @@ public class WalletServiceImpl implements WalletService {
                             ).build();
                 }
 
-        ).onErrorMap(throwable -> {
-            log.error("Unknown exception has occurred due to the following reason " + throwable.getCause());
-            throw new RuntimeException(throwable.getCause());
-        });
+        );
     }
 
    private WalletInfo getWalletDetailsByEmployeeId(String empId) {
