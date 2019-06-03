@@ -17,6 +17,7 @@ import reactor.core.publisher.Mono;
 import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -36,16 +37,18 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public Mono<ResponseBody<RechargeResponse>> rechargeWallet(RechargeRequest recharge) {
 
-
         return Mono.fromSupplier(() -> {
 
                     String walletId = getWalletDetailsByEmployeeId(recharge.getEmpId()).getId();
 
                     if (walletRechargeRepository.existsByRequesterId(recharge.getEmpId())) {
 
-                        throw new WalletRequestAlreadyPending();
+                        log.error("wallet request has been sent and waiting for the approval for employee having id {}", recharge.getEmpId());
+
+                        throw new WalletRequestAlreadyPending("Your wallet request has been sent and waiting for the approval");
                     }
                     RechargeInfo rechargeInfo = RechargeInfo.builder()
+                            .id(UUID.randomUUID().toString())
                             .quantity(recharge.getQuantity())
                             .issuerId("Admin1")
                             .requestedOn(Timestamp.valueOf(LocalDateTime.now()))
@@ -71,7 +74,10 @@ public class WalletServiceImpl implements WalletService {
 
     private WalletInfo getWalletDetailsByEmployeeId(String empId) {
 
-        return walletRepository.findByUserId(empId).orElseThrow(WalletDoesNotExists::new);
-    }
+        return walletRepository.findByUserId(empId).orElseThrow(() -> {
 
+            log.error("Wallet does not exists for empId {}", empId);
+            return new WalletDoesNotExists("Wallet does not exists");
+        });
+    }
 }

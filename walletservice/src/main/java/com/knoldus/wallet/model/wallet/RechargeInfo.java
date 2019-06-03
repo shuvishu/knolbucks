@@ -1,12 +1,12 @@
 package com.knoldus.wallet.model.wallet;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
@@ -15,10 +15,13 @@ import java.sql.Timestamp;
 @Table(name = "coupon_requests")
 @Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RechargeInfo {
 
     @Id
-    int id;
+    @Column(name = "id")
+    String id;
 
     @Column(name = "walletId")
     String walletId;

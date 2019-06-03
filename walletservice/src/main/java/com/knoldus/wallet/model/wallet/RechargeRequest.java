@@ -12,7 +12,7 @@ public class RechargeRequest {
 
     @NotNull(message = "The quantity can not be null")
     @Max(value = 5, message = "The max value of quantity should be less than 5")
-    int quantity;
+    Integer quantity;
 
     @NotBlank(message = "The employee Id cannot be blank")
     String empId;
