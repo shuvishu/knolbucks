@@ -7,7 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum WalletStatus {
 
-    APPROVED("Approved"), PENDING("Pending"), REJECTED("Rejected");
+    APPROVED("Approved"),
+    PENDING("Pending"),
+    REJECTED("Rejected");
 
   private String status;
 

@@ -2,8 +2,8 @@ package com.knoldus.wallet.service;
 
 import com.knoldus.wallet.exception.WalletDoesNotExists;
 import com.knoldus.wallet.exception.WalletRequestAlreadyPending;
-import com.knoldus.wallet.model.wallet.RechargeInfo;
 import com.knoldus.wallet.model.ResponseBody;
+import com.knoldus.wallet.model.wallet.RechargeInfo;
 import com.knoldus.wallet.model.wallet.RechargeRequest;
 import com.knoldus.wallet.model.wallet.RechargeResponse;
 import com.knoldus.wallet.model.wallet.WalletInfo;
@@ -39,21 +39,21 @@ public class WalletServiceImpl implements WalletService {
 
         return Mono.fromSupplier(() -> {
 
-            String walletId = getWalletDetailsByEmployeeId(recharge.getEmpId()).getId();
+                    String walletId = getWalletDetailsByEmployeeId(recharge.getEmpId()).getId();
 
-            if(walletRechargeRepository.existsByRequesterId(recharge.getEmpId())) {
+                    if (walletRechargeRepository.existsByRequesterId(recharge.getEmpId())) {
 
-                throw new WalletRequestAlreadyPending();
-            }
-                   RechargeInfo rechargeInfo = RechargeInfo.builder()
-                           .quantity(recharge.getQuantity())
-                           .issuerId("Admin1")
-                           .requestedOn(Timestamp.valueOf(LocalDateTime.now()))
-                           .approvedOn(Timestamp.valueOf(LocalDateTime.now()))
-                           .walletId(walletId)
-                           .requesterId(recharge.getEmpId())
-                           .status(WalletStatus.PENDING.getStatus())
-                           .build();
+                        throw new WalletRequestAlreadyPending();
+                    }
+                    RechargeInfo rechargeInfo = RechargeInfo.builder()
+                            .quantity(recharge.getQuantity())
+                            .issuerId("Admin1")
+                            .requestedOn(Timestamp.valueOf(LocalDateTime.now()))
+                            .approvedOn(Timestamp.valueOf(LocalDateTime.now()))
+                            .walletId(walletId)
+                            .requesterId(recharge.getEmpId())
+                            .status(WalletStatus.PENDING.getStatus())
+                            .build();
 
                     RechargeInfo response = walletRechargeRepository.save(rechargeInfo);
 
@@ -69,9 +69,9 @@ public class WalletServiceImpl implements WalletService {
         );
     }
 
-   private WalletInfo getWalletDetailsByEmployeeId(String empId) {
+    private WalletInfo getWalletDetailsByEmployeeId(String empId) {
 
         return walletRepository.findByUserId(empId).orElseThrow(WalletDoesNotExists::new);
-   }
+    }
 
 }
