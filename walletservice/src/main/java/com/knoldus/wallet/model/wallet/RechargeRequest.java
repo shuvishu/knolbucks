@@ -1,5 +1,6 @@
 package com.knoldus.wallet.model.wallet;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.Max;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter
+@Builder
 public class RechargeRequest {
 
     @NotNull(message = "The quantity can not be null")
