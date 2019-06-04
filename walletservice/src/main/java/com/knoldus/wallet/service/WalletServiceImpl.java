@@ -40,14 +40,14 @@ public class WalletServiceImpl implements WalletService {
         return Mono.fromSupplier(() -> {
 
                     String walletId = getWalletDetailsByEmployeeId(recharge.getEmpId()).getId();
-
                     if (walletRechargeRepository.existsByRequesterId(recharge.getEmpId())) {
 
                         log.error("wallet request has been sent and waiting for the approval for employee having id {}", recharge.getEmpId());
 
                         throw new WalletRequestAlreadyPending("Your wallet request has been sent and waiting for the approval");
                     }
-                    RechargeInfo rechargeInfo = RechargeInfo.builder()
+
+                    RechargeInfo response = walletRechargeRepository.save(RechargeInfo.builder()
                             .id(UUID.randomUUID().toString())
                             .quantity(recharge.getQuantity())
                             .issuerId("Admin1")
@@ -56,9 +56,7 @@ public class WalletServiceImpl implements WalletService {
                             .walletId(walletId)
                             .requesterId(recharge.getEmpId())
                             .status(WalletStatus.PENDING.getStatus())
-                            .build();
-
-                    RechargeInfo response = walletRechargeRepository.save(rechargeInfo);
+                            .build());
 
                     return ResponseBody.<RechargeResponse>builder()
                             .data(RechargeResponse.builder()
