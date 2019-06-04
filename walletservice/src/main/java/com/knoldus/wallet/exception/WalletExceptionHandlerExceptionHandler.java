@@ -5,7 +5,6 @@ import com.knoldus.wallet.model.ResponseBody;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebExchangeBindException;
@@ -15,8 +14,10 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.knoldus.wallet.model.WalletConstants.UNKNOWN_ERROR;
+
 @RestControllerAdvice
-public class CustomGlobalExceptionHandler {
+public class WalletExceptionHandlerExceptionHandler {
 
     @ExceptionHandler(value = WalletDoesNotExists.class)
     public ResponseEntity<ResponseBody> handleCustomException(Exception ex) {
@@ -40,18 +41,18 @@ public class CustomGlobalExceptionHandler {
 
         WebExchangeBindException methodArgumentNotValidException = (WebExchangeBindException) ex;
 
-       Optional<String> errorMessage =  methodArgumentNotValidException
-               .getBindingResult()
-               .getFieldErrors()
-               .stream()
-               .map(DefaultMessageSourceResolvable::getDefaultMessage)
-               .findAny();
+        Optional<String> errorMessage = methodArgumentNotValidException
+                .getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .findAny();
 
         ResponseBody responseBody = ResponseBody
                 .<Object>builder()
                 .errors(Collections
                         .singletonList(Error.builder()
-                                .errorMessage(errorMessage.orElse("Unknown error due to validation"))
+                                .errorMessage(errorMessage.orElse(UNKNOWN_ERROR))
                                 .errorCode(HttpStatus.BAD_REQUEST.value())
                                 .id(UUID.randomUUID().toString())
                                 .time(LocalDateTime.now().toString())

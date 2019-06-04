@@ -19,6 +19,10 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.knoldus.wallet.model.WalletConstants.WALLET_DOES_NOT_EXIST;
+import static com.knoldus.wallet.model.WalletConstants.WALLET_RECHARGE_SUCCESS_MESSAGE;
+import static com.knoldus.wallet.model.WalletConstants.WALLET_REQUEST_ALREADY_PENDING;
+
 @Slf4j
 @Service
 public class WalletServiceImpl implements WalletService {
@@ -44,7 +48,7 @@ public class WalletServiceImpl implements WalletService {
 
                         log.error("wallet request has been sent and waiting for the approval for employee having id {}", recharge.getEmpId());
 
-                        throw new WalletRequestAlreadyPending("Your wallet request has been sent and waiting for the approval");
+                        throw new WalletRequestAlreadyPending(WALLET_REQUEST_ALREADY_PENDING);
                     }
 
                     RechargeInfo response = walletRechargeRepository.save(RechargeInfo.builder()
@@ -60,7 +64,7 @@ public class WalletServiceImpl implements WalletService {
 
                     return ResponseBody.<RechargeResponse>builder()
                             .data(RechargeResponse.builder()
-                                    .message("Wallet Request Sent and is Pending for Approval")
+                                    .message(WALLET_RECHARGE_SUCCESS_MESSAGE)
                                     .walletRequestId(response.getWalletId())
                                     .build()
 
@@ -72,10 +76,12 @@ public class WalletServiceImpl implements WalletService {
 
     private WalletInfo getWalletDetailsByEmployeeId(String empId) {
 
+        log.info("Fetching Wallet details of employee {}", empId);
+
         return walletRepository.findByUserId(empId).orElseThrow(() -> {
 
             log.error("Wallet does not exists for empId {}", empId);
-            return new WalletDoesNotExists("Wallet does not exists");
+            return new WalletDoesNotExists(WALLET_DOES_NOT_EXIST);
         });
     }
 }

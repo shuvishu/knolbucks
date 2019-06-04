@@ -7,5 +7,4 @@ public interface WalletRechargeRepository extends JpaRepository<RechargeInfo, St
 
     boolean existsByRequesterId(String requesterId);
 
-
 }
