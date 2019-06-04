@@ -17,7 +17,7 @@ import java.util.UUID;
 import static com.knoldus.wallet.model.WalletConstants.UNKNOWN_ERROR;
 
 @RestControllerAdvice
-public class WalletExceptionHandlerExceptionHandler {
+public class WalletExceptionHandler {
 
     @ExceptionHandler(value = WalletDoesNotExists.class)
     public ResponseEntity<ResponseBody> handleCustomException(Exception ex) {
