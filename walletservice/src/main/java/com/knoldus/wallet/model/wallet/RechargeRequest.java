@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class RechargeRequest {
 
-    @NotNull(message = "The quantity can not be null")
+    @NotNull(message = "The quantity cannot be null")
     @Max(value = 5, message = "The max value of quantity should be less than 5")
     Integer quantity;
 

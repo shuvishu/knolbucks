@@ -77,7 +77,7 @@ public class WalletServiceImplTest {
             walletService.rechargeWallet(rechargeRequest).block();
             fail("An exception should be thrown in try block.");
         } catch (Exception ex) {
-            assertThat(ex.getMessage(), containsString("Wallet does not exists"));
+            assertThat(ex.getMessage(), containsString("Wallet does not exist"));
         }
     }
 

@@ -2,21 +2,26 @@ package com.knoldus.wallet.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-@Data
+@Getter
 @Builder
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ResponseBody<T> {
 
     @Builder.Default
-    private String status = "success";
+    String status = "success";
 
-    private List<Error> errors;
+    List<Error> errors;
 
-    private T data;
+    T data;
 }

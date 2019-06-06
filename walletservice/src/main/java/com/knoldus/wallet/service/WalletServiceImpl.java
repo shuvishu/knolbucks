@@ -10,11 +10,11 @@ import com.knoldus.wallet.model.wallet.WalletInfo;
 import com.knoldus.wallet.model.wallet.WalletStatus;
 import com.knoldus.wallet.repository.WalletRechargeRepository;
 import com.knoldus.wallet.repository.WalletRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -25,18 +25,12 @@ import static com.knoldus.wallet.model.WalletConstants.WALLET_REQUEST_ALREADY_PE
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class WalletServiceImpl implements WalletService {
 
     private WalletRechargeRepository walletRechargeRepository;
 
     private WalletRepository walletRepository;
-
-    @Inject
-    public WalletServiceImpl(WalletRechargeRepository walletRechargeRepository, WalletRepository walletRepository) {
-
-        this.walletRechargeRepository = walletRechargeRepository;
-        this.walletRepository = walletRepository;
-    }
 
     @Override
     public Mono<ResponseBody<RechargeResponse>> rechargeWallet(RechargeRequest recharge) {

@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.knoldus.wallet.model.WalletConstants.UNKNOWN_ERROR;
+import static com.knoldus.wallet.model.WalletConstants.UNKNOWN_VALIDATION_ERROR;
 
 @RestControllerAdvice
 public class WalletExceptionHandler {
@@ -52,7 +52,7 @@ public class WalletExceptionHandler {
                 .<Object>builder()
                 .errors(Collections
                         .singletonList(Error.builder()
-                                .errorMessage(errorMessage.orElse(UNKNOWN_ERROR))
+                                .errorMessage(errorMessage.orElse(UNKNOWN_VALIDATION_ERROR))
                                 .errorCode(HttpStatus.BAD_REQUEST.value())
                                 .id(UUID.randomUUID().toString())
                                 .time(LocalDateTime.now().toString())
