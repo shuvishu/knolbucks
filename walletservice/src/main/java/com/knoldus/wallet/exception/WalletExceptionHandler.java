@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class WalletExceptionHandler {
 
-    @ExceptionHandler(value = WalletDoesNotExistException.class)
+    @ExceptionHandler(value = UserDoesNotExistException.class)
     public ResponseEntity<ResponseBody> handleCustomException(Exception ex) {
 
         ResponseBody responseBody = ResponseBody

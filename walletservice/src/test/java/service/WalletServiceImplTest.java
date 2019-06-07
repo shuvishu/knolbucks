@@ -41,7 +41,6 @@ public class WalletServiceImplTest {
         RechargeInfo rechargeInfo = RechargeInfo.builder()
                 .requesterId("empId")
                 .walletId("walletId")
-                .approvedOn(Timestamp.valueOf(LocalDateTime.now()))
                 .requestedOn(Timestamp.valueOf(LocalDateTime.now()))
                 .quantity(3)
                 .id("id")
@@ -76,7 +75,7 @@ public class WalletServiceImplTest {
             walletService.rechargeWallet(rechargeRequest).block();
             fail("An exception should be thrown in try block.");
         } catch (Exception ex) {
-            assertThat(ex.getMessage(), containsString("Wallet does not exist"));
+            assertThat(ex.getMessage(), containsString("User does not exist"));
         }
     }
 

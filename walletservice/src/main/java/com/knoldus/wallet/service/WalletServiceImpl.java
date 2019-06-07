@@ -1,6 +1,6 @@
 package com.knoldus.wallet.service;
 
-import com.knoldus.wallet.exception.WalletDoesNotExistException;
+import com.knoldus.wallet.exception.UserDoesNotExistException;
 import com.knoldus.wallet.exception.WalletRequestAlreadyPendingException;
 import com.knoldus.wallet.model.ResponseBody;
 import com.knoldus.wallet.model.wallet.RechargeInfo;
@@ -19,7 +19,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static com.knoldus.wallet.model.WalletConstants.WALLET_DOES_NOT_EXIST;
+import static com.knoldus.wallet.model.WalletConstants.USER_DOES_NOT_EXIST;
 import static com.knoldus.wallet.model.WalletConstants.WALLET_RECHARGE_SUCCESS_MESSAGE;
 import static com.knoldus.wallet.model.WalletConstants.WALLET_REQUEST_ALREADY_PENDING;
 
@@ -50,7 +50,6 @@ public class WalletServiceImpl implements WalletService {
                             .quantity(recharge.getQuantity())
                             .issuerId("Admin1")
                             .requestedOn(Timestamp.valueOf(LocalDateTime.now()))
-                            .approvedOn(Timestamp.valueOf(LocalDateTime.now()))
                             .walletId(walletId)
                             .requesterId(recharge.getEmpId())
                             .status(WalletStatus.PENDING.getStatus())
@@ -72,8 +71,8 @@ public class WalletServiceImpl implements WalletService {
 
         return walletRepository.findByUserId(empId).orElseThrow(() -> {
 
-            log.error("Wallet does not exists for empId {}", empId);
-            return new WalletDoesNotExistException(WALLET_DOES_NOT_EXIST);
+            log.error("User having id {} does not exist", empId);
+            return new UserDoesNotExistException(USER_DOES_NOT_EXIST);
         });
     }
 }
