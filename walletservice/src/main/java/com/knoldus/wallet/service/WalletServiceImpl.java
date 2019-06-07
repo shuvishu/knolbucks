@@ -45,7 +45,7 @@ public class WalletServiceImpl implements WalletService {
                         throw new WalletRequestAlreadyPendingException(WALLET_REQUEST_ALREADY_PENDING);
                     }
 
-                    RechargeInfo response = walletRechargeRepository.save(RechargeInfo.builder()
+                    walletRechargeRepository.save(RechargeInfo.builder()
                             .id(UUID.randomUUID().toString())
                             .quantity(recharge.getQuantity())
                             .issuerId("Admin1")
@@ -59,12 +59,10 @@ public class WalletServiceImpl implements WalletService {
                     return ResponseBody.<RechargeResponse>builder()
                             .data(RechargeResponse.builder()
                                     .message(WALLET_RECHARGE_SUCCESS_MESSAGE)
-                                    .walletRequestId(response.getWalletId())
                                     .build()
 
                             ).build();
                 }
-
         );
     }
 

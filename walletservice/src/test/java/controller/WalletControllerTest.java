@@ -40,7 +40,7 @@ public class WalletControllerTest {
                                 .<RechargeResponse>builder()
                                 .data(RechargeResponse.builder()
                                         .message("Wallet Request Sent and is Pending for Approval")
-                                        .walletRequestId("walletId").build())
+                                        .build())
                                 .build()));
 
         webTestClient.post().uri("/wallet").contentType(MediaType.APPLICATION_JSON)

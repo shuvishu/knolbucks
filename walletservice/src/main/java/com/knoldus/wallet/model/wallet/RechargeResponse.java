@@ -9,5 +9,4 @@ public class RechargeResponse {
 
     String message;
 
-    String walletRequestId;
 }

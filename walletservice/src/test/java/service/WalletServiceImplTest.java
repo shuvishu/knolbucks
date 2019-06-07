@@ -60,7 +60,6 @@ public class WalletServiceImplTest {
         RechargeResponse response = walletService.rechargeWallet(rechargeRequest).block().getData();
         assertNotNull(response);
         assertEquals("Wallet Request Sent and is Pending for Approval", response.getMessage());
-        assertEquals("walletId", response.getWalletRequestId());
 
     }
 
