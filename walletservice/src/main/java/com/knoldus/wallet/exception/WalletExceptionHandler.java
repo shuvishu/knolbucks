@@ -11,10 +11,9 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
-
-import static com.knoldus.wallet.model.WalletConstants.UNKNOWN_VALIDATION_ERROR;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class WalletExceptionHandler {
@@ -41,22 +40,23 @@ public class WalletExceptionHandler {
 
         WebExchangeBindException methodArgumentNotValidException = (WebExchangeBindException) ex;
 
-        Optional<String> errorMessage = methodArgumentNotValidException
+        List<String> errorMessage = methodArgumentNotValidException
                 .getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .findAny();
+                .collect(Collectors.toList());
 
         ResponseBody responseBody = ResponseBody
                 .<Object>builder()
-                .errors(Collections
-                        .singletonList(Error.builder()
-                                .errorMessage(errorMessage.orElse(UNKNOWN_VALIDATION_ERROR))
+                .errors(errorMessage.stream()
+                        .map(message -> Error.builder()
+                                .time(LocalDateTime.now().toString())
+                                .errorMessage(message)
                                 .errorCode(HttpStatus.BAD_REQUEST.value())
                                 .id(UUID.randomUUID().toString())
-                                .time(LocalDateTime.now().toString())
-                                .build()))
+                                .time(LocalDateTime.now().toString()).build())
+                        .collect(Collectors.toList()))
                 .status("failed")
                 .build();
 
