@@ -19,7 +19,7 @@ import static com.knoldus.wallet.model.WalletConstants.UNKNOWN_VALIDATION_ERROR;
 @RestControllerAdvice
 public class WalletExceptionHandler {
 
-    @ExceptionHandler(value = WalletDoesNotExists.class)
+    @ExceptionHandler(value = WalletDoesNotExistException.class)
     public ResponseEntity<ResponseBody> handleCustomException(Exception ex) {
 
         ResponseBody responseBody = ResponseBody
@@ -63,7 +63,7 @@ public class WalletExceptionHandler {
         return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(WalletRequestAlreadyPending.class)
+    @ExceptionHandler(WalletRequestAlreadyPendingException.class)
     public ResponseEntity<ResponseBody> WalletRequestAlreadyPending(Exception ex) {
 
         ResponseBody responseBody = ResponseBody

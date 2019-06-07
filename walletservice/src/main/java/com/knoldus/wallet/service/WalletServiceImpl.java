@@ -1,7 +1,7 @@
 package com.knoldus.wallet.service;
 
-import com.knoldus.wallet.exception.WalletDoesNotExists;
-import com.knoldus.wallet.exception.WalletRequestAlreadyPending;
+import com.knoldus.wallet.exception.WalletDoesNotExistException;
+import com.knoldus.wallet.exception.WalletRequestAlreadyPendingException;
 import com.knoldus.wallet.model.ResponseBody;
 import com.knoldus.wallet.model.wallet.RechargeInfo;
 import com.knoldus.wallet.model.wallet.RechargeRequest;
@@ -42,7 +42,7 @@ public class WalletServiceImpl implements WalletService {
 
                         log.error("wallet request has been sent and waiting for the approval for employee having id {}", recharge.getEmpId());
 
-                        throw new WalletRequestAlreadyPending(WALLET_REQUEST_ALREADY_PENDING);
+                        throw new WalletRequestAlreadyPendingException(WALLET_REQUEST_ALREADY_PENDING);
                     }
 
                     RechargeInfo response = walletRechargeRepository.save(RechargeInfo.builder()
@@ -75,7 +75,7 @@ public class WalletServiceImpl implements WalletService {
         return walletRepository.findByUserId(empId).orElseThrow(() -> {
 
             log.error("Wallet does not exists for empId {}", empId);
-            return new WalletDoesNotExists(WALLET_DOES_NOT_EXIST);
+            return new WalletDoesNotExistException(WALLET_DOES_NOT_EXIST);
         });
     }
 }
