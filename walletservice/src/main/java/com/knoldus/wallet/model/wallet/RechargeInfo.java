@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import java.sql.Timestamp;
 
 @Getter
-@Table(name = "coupon_requests")
+@Table(name = "wallet_recharge_request")
 @Entity
 @Builder
 @NoArgsConstructor
