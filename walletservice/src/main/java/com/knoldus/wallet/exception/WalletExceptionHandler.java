@@ -2,6 +2,7 @@ package com.knoldus.wallet.exception;
 
 import com.knoldus.wallet.model.Error;
 import com.knoldus.wallet.model.ResponseBody;
+import org.hibernate.exception.GenericJDBCException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class WalletExceptionHandler {
 
-    @ExceptionHandler(value = UserDoesNotExistException.class)
+    @ExceptionHandler(value = {UserDoesNotExistException.class, NoPendingRequestException.class})
     public ResponseEntity<ResponseBody> handleCustomException(Exception ex) {
 
         ResponseBody responseBody = ResponseBody
@@ -78,6 +79,24 @@ public class WalletExceptionHandler {
                                 .build()))
                 .build();
         return new ResponseEntity<>(responseBody, HttpStatus.CONFLICT);
+
+    }
+
+    @ExceptionHandler(GenericJDBCException.class)
+    public ResponseEntity<ResponseBody> handleUnexpectedFailures(Exception ex) {
+
+        ResponseBody responseBody = ResponseBody
+                .<Object>builder()
+                .status("failed")
+                .errors(Collections
+                        .singletonList(Error.builder()
+                                .errorMessage(ex.getMessage())
+                                .id(UUID.randomUUID().toString())
+                                .errorCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                                .time(LocalDateTime.now().toString())
+                                .build()))
+                .build();
+        return new ResponseEntity<>(responseBody, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 }
