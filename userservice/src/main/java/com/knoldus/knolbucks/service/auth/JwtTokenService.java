@@ -7,15 +7,15 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.knoldus.knolbucks.model.User;
+import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 
 @Service
 public class JwtTokenService {
 
-    private static final String TOKEN_SECRET = "s4T2zOIWHMM1sxq";
+    private static final String TOKEN_SECRET = "knolbucks";
     private static Algorithm algorithm;
 
     static {
@@ -54,8 +54,8 @@ public class JwtTokenService {
         }
     }
 
-    public boolean isTokenValid(String token) {
-        String userId = this.getUserIdFromToken(token);
-        return userId != null;
+    public boolean isTokenValid(String token, String userId) {
+        String userIdToken = this.getUserIdFromToken(token);
+        return userId != null && StringUtils.equals(userIdToken, userId);
     }
 }

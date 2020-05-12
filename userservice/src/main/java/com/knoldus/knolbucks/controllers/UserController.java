@@ -22,22 +22,22 @@ public class UserController {
     }
 
     @PostMapping(value = "")
-    public Mono<User> createUser(@Valid @RequestBody User user){
+    public Mono<User> createUser(@Valid @RequestBody User user, @RequestHeader("Authorization") String token){
         return userService.createUser(user);
     }
 
     @GetMapping("/{userId}")
-    public Mono<User> getUserById(@PathVariable String userId){
+    public Mono<User> getUserById(@PathVariable String userId, @RequestHeader("Authorization") String token){
         return userService.getUser(userId);
     }
 
     @GetMapping("")
-    public Flux<User> getUsers(){
+    public Flux<User> getUsers(@RequestHeader("Authorization") String token){
         return userService.getUsers();
     }
 
     @PutMapping("")
-    public Mono<User> updateUser(@Valid @RequestBody User user){
+    public Mono<User> updateUser(@Valid @RequestBody User user, @RequestHeader("Authorization") String token){
         return userService.updateUser(user);
     }
 

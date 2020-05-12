@@ -1,6 +1,7 @@
 package com.knoldus.knolbucks.service;
 
 import com.knoldus.knolbucks.model.User;
+import com.knoldus.knolbucks.model.expections.CustomException;
 import com.knoldus.knolbucks.model.request.user.LoginRequest;
 import com.knoldus.knolbucks.model.response.user.LoginSuccess;
 import com.knoldus.knolbucks.repository.UserRepository;
@@ -58,7 +59,10 @@ public class UserServiceImpl implements UserService {
 	public Mono<LoginSuccess> loginUser(LoginRequest request) {
 		return userRepository.findByEmail(request.getEmail()).flatMap(user -> {
 			if(user.getActive()){
-				 return Mono.just(LoginSuccess.builder().jwtToken(jwtTokenService.createToken(user)).build());
+				 return Mono.just(LoginSuccess
+                         .builder()
+                         .jwtToken(jwtTokenService.createToken(user))
+                         .build());
 			} else {
 				user.setActive(true);
 				return userRepository.save(user).map(res -> LoginSuccess
